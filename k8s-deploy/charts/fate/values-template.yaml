@@ -11,6 +11,7 @@ partyName: {{ .name }}
 host:
   fateboard: fate-{{ .partyId }}.{{ .domain }}
   client: fate-client-{{ .partyId }}.{{ .domain }}
+  console: fate-console-{{ .partyId}}.{{ .domain }}
 
 nodePort: {{ with .rollsite }}{{ .nodePort }}{{ end }}
 
@@ -158,4 +159,16 @@ modules:
   serving:
     ip: {{ .servingIp }}
     port: {{ .servingPort }}
+  console: 
+    include: {{ has "console" .modules }}
+    ip: console
+    type: ClusterIP
+    {{- with .console }}
+    {{- with .nodeSelector }}
+    nodeSelector: 
+    {{- range $k, $v := . }}
+      {{ $k }}: {{ $v }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
     

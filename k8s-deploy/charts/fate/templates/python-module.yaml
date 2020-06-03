@@ -313,6 +313,20 @@ spec:
               subPath: application.properties
             - name: logs
               mountPath: /data/projects/fate/python/logs
+        - image: cyranochen/thales-console:latest
+          imagePullPolicy: Always
+          name: console
+          command: ["sh", "-c", "python main.py > ./logs/tornado.log"]
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENDPOINT
+              value: "http://localhost:9380"
+          volumeMounts:
+            - name: trainingdata
+              mountPath: /trainingdata
+            - name: logs
+              mountPath: /home/code/logs
       {{- with .Values.modules.python.nodeSelector }}
       nodeSelector: 
       {{- range $k, $v := . }}
@@ -333,6 +347,8 @@ spec:
         - name: logs
           emptyDir: {}
         - name: download-dir
+          emptyDir: {}
+        - name: trainingdata
           emptyDir: {}
 ---
 apiVersion: v1
@@ -377,6 +393,28 @@ spec:
   selector:
     fateMoudle: python
 {{ include "fate.matchLabels" . | indent 4 }}
+
+{{- if .Values.modules.console.include }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: console
+  labels:
+    fateMoudle: python
+{{ include "fate.labels" . | indent 4 }}
+spec:
+  ports:
+    - name: "8080"
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
+  type: {{ .Values.modules.console.type }}
+  selector:
+    fateMoudle: python
+{{ include "fate.matchLabels" . | indent 4 }}
+{{end}}
+
 ---
 {{- if .Values.modules.client.include }}
 apiVersion: v1

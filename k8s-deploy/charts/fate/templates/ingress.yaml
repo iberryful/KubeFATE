@@ -42,3 +42,24 @@ spec:
           servicePort: 20000
 ---
 {{ end }}
+
+
+{{ if .Values.modules.console.include }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: console
+  labels:
+    fateMoudle: console
+{{ include "fate.labels" . | indent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.host.console }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: console
+          servicePort: 8000
+---
+{{ end }}
