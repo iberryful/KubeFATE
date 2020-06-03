@@ -5,6 +5,7 @@ chartVersion: v1.4.0
 partyId: 9999
 registry: ""
 pullPolicy: 
+domain: dev.datahub.only.sap
 persistence: false
 modules:
   - rollsite
@@ -12,7 +13,7 @@ modules:
   - nodemanager
   - mysql
   - python
-# - client
+  - client
 
 rollsite: 
   type: NodePort
@@ -52,8 +53,8 @@ mysql:
   user: fate
   password: fate_dev
   subPath: ""
-  existingClaim: ""
-  storageClass: "mysql"
+  # existingClaim: ""
+  # storageClass: "mysql"
   accessMode: ReadWriteOnce
   size: 1Gi
 

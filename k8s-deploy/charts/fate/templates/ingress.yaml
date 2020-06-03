@@ -1,0 +1,44 @@
+########################################################
+# Copyright 2019-2020 program was created VMware, Inc. #
+# SPDX-License-Identifier: Apache-2.0                  #
+########################################################
+
+{{ if .Values.modules.python.include }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: fateboard
+  labels:
+    fateMoudle: fateboard
+{{ include "fate.labels" . | indent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.host.fateboard }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: fateboard
+          servicePort: 8080
+---
+{{ end }}
+
+{{ if .Values.modules.client.include }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: client
+  labels:
+    fateMoudle: client
+{{ include "fate.labels" . | indent 4 }}
+spec:
+  rules:
+  - host: {{ .Values.host.client }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: notebook
+          servicePort: 20000
+---
+{{ end }}
