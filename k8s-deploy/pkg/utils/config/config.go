@@ -30,11 +30,12 @@ func InitViper() error {
 	viper.SetEnvKeyReplacer(replacer)
 
 	// User specified config path, "" by default
-	var altPath = os.Getenv("cUserSpecifiedPATH")
+	var altPath = os.Getenv(cUserSpecifiedPATH)
 	if altPath != "" {
 		if !DirExists(altPath) {
 			return fmt.Errorf("%s %s does not exist", cUserSpecifiedPATH, altPath)
 		}
+		viper.AddConfigPath(altPath)
 	} else {
 		// Append the project dir to the config seraching path
 		path, _ := filepath.Abs(".")

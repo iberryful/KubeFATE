@@ -5,4 +5,4 @@ user:
   username: admin
   password: admin
 
-serviceurl: kubefate.net
+serviceurl: kubefate.dev.datahub.only.sap
