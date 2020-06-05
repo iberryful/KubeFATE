@@ -279,7 +279,7 @@ spec:
               name: python-confs
             - name: logs
               mountPath: /data/projects/fate/python/logs
-            - name: download-dir
+            - name: persistence-dir
               mountPath: /data/projects/fate/python/download_dir
         {{- if .Values.modules.client.include }}
         - image: {{ .Values.image.registry }}/client:{{ .Values.image.tag }}
@@ -299,7 +299,7 @@ spec:
               name: python-confs
             - name: logs
               mountPath: /data/projects/fate/client/logs
-            - name: download-dir
+            - name: persistence-dir
               mountPath: /data/projects/fate/python/download_dir
         {{- end }}
         - image: {{ .Values.image.registry }}/fateboard:{{ .Values.image.tag }}
@@ -323,7 +323,7 @@ spec:
             - name: ENDPOINT
               value: "http://localhost:9380"
           volumeMounts:
-            - name: trainingdata
+            - name: persistence-dir
               mountPath: /trainingdata
             - name: logs
               mountPath: /home/code/logs
@@ -346,10 +346,14 @@ spec:
             name: fateboard-config
         - name: logs
           emptyDir: {}
-        - name: download-dir
+        {{- if not .Values.persistence.enabled }}
+        - name: persistence-dir
           emptyDir: {}
-        - name: trainingdata
-          emptyDir: {}
+        {{- else }}
+        - name: persistence-dir
+          persistentVolumeClaim:
+            claimName: "python-data"
+        {{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -436,4 +440,29 @@ spec:
 {{ include "fate.matchLabels" . | indent 4 }}
 ---
 {{- end }}
+
+---
+{{- if and .Values.persistence.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: python-data
+  labels:
+    fateMoudle: python
+{{ include "fate.labels" . | indent 4 }}
+spec:
+  accessModes: 
+    - {{ .Values.modules.python.accessMode | default "ReadWriteOnce"}}
+  resources:
+    requests:
+      storage: {{ .Values.modules.python.size | default "10G"}}
+  {{- if .Values.modules.python.storageClass }}
+    {{- if eq "-" .Values.modules.python.storageClass }}
+  storageClassName: ""
+    {{- else }}
+  storageClassName: {{ .Values.modules.python.storageClass }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
 {{ end }}

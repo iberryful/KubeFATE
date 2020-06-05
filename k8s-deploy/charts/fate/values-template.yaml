@@ -9,9 +9,9 @@ partyId: {{ .partyId }}
 partyName: {{ .name }}
 
 host:
-  fateboard: fate-{{ .partyId }}.{{ .domain }}
+  fateboard: fate-board-{{ .partyId }}.{{ .domain }}
   client: fate-client-{{ .partyId }}.{{ .domain }}
-  console: fate-console-{{ .partyId}}.{{ .domain }}
+  console: fate-{{ .partyId}}.{{ .domain }}
 
 nodePort: {{ with .rollsite }}{{ .nodePort }}{{ end }}
 
@@ -63,6 +63,9 @@ modules:
     {{- end }}
     {{- end }}
     {{- end }}
+    storageClass: {{ .python.storageClass | default "" }}
+    accessMode: {{ .python.accessMode | default "ReadWriteOnce" }}
+    size: {{ .python.size | default "10Gi" }}
   clustermanager: 
     include: {{ has "clustermanager" .modules }}
     ip: clustermanager
@@ -86,7 +89,7 @@ modules:
       sessionProcessorsPerNode: {{ $nodemanager.sessionProcessorsPerNode }}
       subPath: "nodemanager-{{ . }}"
       existingClaim: ""
-      storageClass: "nodemanager-{{ . }}"
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 1Gi
     {{- end }}

@@ -6,7 +6,7 @@ partyId: 9999
 registry: ""
 pullPolicy: 
 domain: dev.datahub.only.sap
-persistence: false
+persistence: true
 modules:
   - rollsite
   - clustermanager
@@ -37,7 +37,7 @@ nodemanager:
     sessionProcessorsPerNode: 2
     subPath: "nodemanager"
     existingClaim: ""
-    storageClass: "nodemanager"
+    storageClass: ""
     accessMode: ReadWriteOnce
     size: 1Gi
 

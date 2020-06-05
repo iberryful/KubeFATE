@@ -1,8 +1,8 @@
-name: fate-serving-9999
-namespace: fate-serving-9999
+name: fate-serving-10000
+namespace: fate-serving-10000
 chartName: fate-serving
 chartVersion: v1.2.4
-partyId: 9999
+partyId: 10000
 registry: ""
 pullPolicy: 
 persistence: false
@@ -12,40 +12,39 @@ modules:
   - servingServer
 
 servingProxy: 
-  nodePort: 30309
-  ingerssHost: serving-proxy-9999.dev.datahub.only.sap
+  nodePort: 30110
+  ingerssHost: 10000.serving-proxy.kubefate.net
   partyList:
-  - partyId: 10000
-    partyIp: 192.168.10.1
-    partyPort: 30310
+  - partyId: 9999
+    partyIp: 192.168.9.1
+    partyPort: 30109
   exchange:
-    ip: 192.168.1.1
+    ip: 192.168.10.1
     port: 30100
-  nodeSelector: {}
 
 servingServer:
   type: NodePort
-  nodePort: 30209
+  nodePort: 30110
   fateflow:
     ip: 192.168.9.1
-    port: 30109
+    port: 9380
   subPath: ""
   existingClaim: ""
-  storageClass: ""
+  storageClass: "serving-server"
   accessMode: ReadWriteOnce
   size: 1Gi
-  nodeSelector: {}
 
 servingRedis:
   password: fate_dev
   nodeSelector: {}
   subPath: ""
   existingClaim: ""
-  storageClass: ""
+  storageClass: "serving-redis"
   accessMode: ReadWriteOnce
   size: 1Gi
-
-# externalRedisIp: serving-redis
-# externalRedisPort: 6379
-# externalRedisDatabase: 0
-# externalRedisPassword: fate_dev
+  
+# 如果不安装Redis的时候配置
+externalRedisIp: serving-redis
+externalRedisPort: 6379
+externalRedisDatabase: 0
+externalRedisPassword: fate_dev

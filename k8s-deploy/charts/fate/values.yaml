@@ -25,7 +25,7 @@ partyList:
   partyPort: 30010
 
 persistence:
-  enabled: false
+  enabled: true
 
 modules:
   rollsite: 
@@ -54,7 +54,7 @@ modules:
       sessionProcessorsPerNode: 2
       subPath: "nodemanager-0"
       existingClaim: ""
-      storageClass: "nodemanager-0"
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 1Gi
     - name: nodemanager-1
@@ -62,7 +62,7 @@ modules:
       sessionProcessorsPerNode: 2
       subPath: "nodemanager-1"
       existingClaim: ""
-      storageClass: "nodemanager-1"
+      storageClass: ""
       accessMode: ReadWriteOnce
       size: 1Gi
   client: 
@@ -87,7 +87,7 @@ modules:
     subPath: "mysql"
     existingClaim: ""
     claimName: mysql-data
-    storageClass: "mysql"
+    storageClass: ""
     accessMode: ReadWriteOnce
     size: 1Gi
   serving:

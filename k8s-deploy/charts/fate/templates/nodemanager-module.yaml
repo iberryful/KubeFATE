@@ -118,10 +118,10 @@ spec:
         {{- if not $root.Values.persistence.enabled }}
         - name: data-dir
           emptyDir: {}
-        {{- else if $nodemanager.existingClaim }}
+        {{- else  }}
         - name: data-dir
           persistentVolumeClaim:
-            claimName: {{ $nodemanager.existingClaim | default  (  $nodemanager.name  "-data") }}
+            claimName: {{ $nodemanager.name }}-data
         {{- end }}
 ---
 apiVersion: v1
@@ -142,7 +142,7 @@ spec:
     fateMoudle: {{ $nodemanager.name }}
 {{ include "fate.matchLabels" $root | indent 4 }}
 ---
-{{- if and $root.Values.persistence.enabled (not $nodemanager.existingClaim) }}
+{{- if and $root.Values.persistence.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
