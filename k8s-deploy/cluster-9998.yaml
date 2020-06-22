@@ -1,0 +1,72 @@
+name: fate-9998
+namespace: fate-9998
+chartName: fate
+chartVersion: v1.4.0
+partyId: 9998
+registry: ""
+pullPolicy: 
+domain: dev.datahub.only.sap
+persistence: true
+modules:
+  - rollsite
+  - clustermanager
+  - nodemanager
+  - mysql
+  - python
+  - client
+  - console
+
+rollsite: 
+  type: NodePort
+  nodePort: 32000
+  partyList:
+  - partyId: 9999
+    partyIp: rollsite.fate-9999
+    partyPort: 9370
+  nodeSelector: {}
+
+
+console:
+  image: iberryful/thales-party:latest
+
+nodemanager:
+  count: 3
+  sessionProcessorsPerNode: 4
+  list:
+  - name: nodemanager
+    nodeSelector: {}
+    sessionProcessorsPerNode: 2
+    subPath: "nodemanager"
+    existingClaim: ""
+    storageClass: "nodemanager"
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+python:
+  fateflowType: NodePort
+  fateflowNodePort: 30200
+  nodeSelector: {}
+
+mysql: 
+  nodeSelector: {}
+  ip: mysql
+  port: 3306
+  database: eggroll_meta
+  user: fate
+  password: fate_dev
+  subPath: ""
+  # existingClaim: ""
+  # storageClass: "mysql"
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+# If use external MySQL, uncomment and change this section
+# externalMysqlIp: mysql
+# externalMysqlPort: 3306
+# externalMysqlDatabase: eggroll_meta
+# externalMysqlUser: fate
+# externalMysqlPassword: fate_dev
+
+# If FATE-Serving deployed, uncomment and change
+# servingIp: 192.168.9.1
+# servingPort: 30209

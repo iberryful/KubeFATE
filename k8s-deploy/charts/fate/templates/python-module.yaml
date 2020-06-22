@@ -313,10 +313,9 @@ spec:
               subPath: application.properties
             - name: logs
               mountPath: /data/projects/fate/python/logs
-        - image: cyranochen/thales-console:latest
+        - image: {{ .Values.modules.console.image | default "cyranochen/thales-party:latest" }}
           imagePullPolicy: Always
           name: console
-          command: ["sh", "-c", "python main.py > ./logs/tornado.log"]
           ports:
             - containerPort: 8000
           env:

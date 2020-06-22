@@ -16,16 +16,16 @@ modules:
   - client
   - console
 
+console:
+  image: iberryful/thales-party:latest
+
 rollsite: 
   type: NodePort
   nodePort: 30009
-  exchange:
-    ip: 192.168.1.1
-    port: 30000
   partyList:
-  - partyId: 10000
-    partyIp: 192.168.10.1
-    partyPort: 30010
+  - partyId: 9998
+    partyIp: rollsite.fate-9998
+    partyPort: 9370
   nodeSelector: {}
 
 nodemanager:

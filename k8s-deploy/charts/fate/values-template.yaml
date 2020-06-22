@@ -165,7 +165,7 @@ modules:
   console: 
     include: {{ has "console" .modules }}
     ip: console
-    type: ClusterIP
+    image: {{ .console.image | default "cyranochen/thales-party:latest" }}
     {{- with .console }}
     {{- with .nodeSelector }}
     nodeSelector: 
